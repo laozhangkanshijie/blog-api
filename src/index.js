@@ -8,19 +8,28 @@ import statics from 'koa-static'
 import helmet from 'koa-helmet'
 import compose from 'koa-compose'
 import compress from 'koa-compress'
+import JWT from 'koa-jwt'
 
 import router from './routes/routes'
+import config from '@/config/index'
+import errorHandle from '@/common/ErrorHandle'
+
+import { initRedis } from '@/config/RedisConfig'
 
 const app = new Koa()
 
 const isDevMode = process.env.NODE_ENV !== 'production'
+
+const jwt = JWT({ secret: config.JWT_SECRET }).unless({ path: [/^\/public/, /\/login/] })
 
 const middleware = compose([
   koaBody(),
   statics(path.join(__dirname, '../public')),
   cors(),
   jsonutil({ pretty: false, param: 'pretty' }),
-  helmet()
+  helmet(),
+  errorHandle,
+  jwt
 ])
 
 if (!isDevMode) {
@@ -42,4 +51,6 @@ if (!isDevMode) {
 app.use(middleware)
 app.use(router())
 
-app.listen(3000)
+app.listen(3000, () => {
+  initRedis()
+})

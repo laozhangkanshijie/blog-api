@@ -1,8 +1,8 @@
 const path = require('path')
 const utils = require('./utils')
 const nodeExcternals = require('webpack-node-externals')
-const {CleanWebpackPlugin} = require('clean-webpack-plugin')
-const webpack  = require('webpack')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const webpack = require('webpack')
 
 const webpackconfig = {
   target: 'node',
@@ -25,13 +25,22 @@ const webpackconfig = {
       }
     ]
   },
+  resolve: {
+    // aliass: {
+    //   // 告诉 webpack,程序员写的代码中，＠符号表示 src 这一层目录
+    //   '@': utils.APP_PATH
+    // }
+    ...utils.getWebpackResolveConfig()
+  },
   externals: [nodeExcternals()],
   plugins: [
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: (process.env.NODE_ENV === 'production' || 
-        process.env.NODE_ENV === 'prod') ? 'production' : 'development'
+        NODE_ENV:
+          process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'prod'
+            ? "'production'"
+            : "'dev'"
       }
     })
     // new webpack.EnvironmentPlugin(['NODE_ENV'])

@@ -11,5 +11,6 @@ import combineRoutes from 'koa-combine-routers'
 // }, [])
 
 import publicRouter from './publicRouter'
+import logingRouter from './loginRouter'
 
-export default combineRoutes(publicRouter)
+export default combineRoutes(publicRouter, logingRouter)
