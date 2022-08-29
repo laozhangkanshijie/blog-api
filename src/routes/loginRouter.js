@@ -4,5 +4,6 @@ import loginController from '@/api/LoginController'
 const router = new Router()
 router.prefix('/login')
 router.post('/login', loginController.login)
+router.post('/reg', loginController.reg)
 
 export default router
